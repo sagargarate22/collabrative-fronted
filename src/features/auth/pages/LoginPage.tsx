@@ -1,7 +1,7 @@
 import {useForm, type SubmitHandler, Controller} from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, type LoginFormData } from "../types/auth.schema";
-import { Link } from "react-router-dom";
+import { Link, replace } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -18,19 +18,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, Mail, Lock,  EyeOff, ArrowRight, GitForkIcon, CircleAlert, Loader } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import useLogin from '../hooks/authHooks';
+import getApiAxiosError from '@/shared/utils/ApiErrorMessage';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage()
 {
+    const navigate = useNavigate()
     const [showPass, setShowPass] = useState(false);
 
     const login = useLogin();
 
-    function handlePassword()
-    {
+    const handlePassword = useCallback(()=> {
         setShowPass(!showPass);
-    }
+    }, [showPass])
 
     const form = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -38,12 +40,15 @@ export default function LoginPage()
             email: "",
             password: "",
         },
-        mode: 'onChange'
+        // mode: 'onChange'
     })
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+        console.log("first")
         await login.mutateAsync(data)
+        navigate('/dashboards', {replace:true})
     }
+
     return (
             <main className="w-full flex flex-col h-auto justify-center items-center mt-10 mb-10">
                 <header className='text-center'>
@@ -52,7 +57,7 @@ export default function LoginPage()
                 </header>
                 <Card className="w-full max-w-110 mt-10 pt-8 card-elevation border-2">
                     <CardHeader className='ml-2 mr-2'>
-                        <CardTitle className="font-semibold text-2xl">Welcome Back</CardTitle>
+                        <CardTitle className="font-semibold text-lg">Welcome Back</CardTitle>
                         <CardDescription className="text-sm text-gray-500">
                             Sign in to continue to your workspace.
                         </CardDescription>
@@ -62,7 +67,7 @@ export default function LoginPage()
                         <CardContent className="ml-2 mr-2">
                             <div className='bg-destructive/30 rounded-md flex px-5 p-5  gap-3 items-start'>
                                 <CircleAlert className='text-destructive/80'/>
-                                <p className='text-sm text-center text-destructive/80'>{login.error.message}</p>
+                                <p className='text-sm text-center text-destructive/80'>{getApiAxiosError(login.error)}</p>
                             </div>
                         </CardContent>
                     )}
@@ -82,9 +87,8 @@ export default function LoginPage()
                                             <Input 
                                             {...field}
                                             id='login-form-email'
-                                            arai-invalid={fieldState.invalid}
                                             placeholder='example@gmail.com'
-                                            autoComplete='off' 
+                                            // autoComplete='off' 
                                             className='bg-background px-10 focus-visible:ring-1 focus-visible:border-blue-700'
                                             />
                                         </div>
@@ -112,7 +116,6 @@ export default function LoginPage()
                                             <Input 
                                             {...field}
                                             id='login-form-password'
-                                            arai-invalid={fieldState.invalid}
                                             autoComplete='off'
                                             className='bg-background px-10 focus-visible:ring-1 focus-visible:border-blue-700'
                                             placeholder='Your password'
@@ -162,14 +165,14 @@ export default function LoginPage()
                     <CardFooter className='bg-background mt-3'>
                         <Field orientation='horizontal' className='justify-center items-center'>
                                 <h3 className='text-sm'>Don't have an account?</h3>
-                                <Link className='text-sm text-blue-400 hover:underline' to="/register">Create an account</Link>
+                                <Link className='text-sm text-blue-600 hover:underline' to="/register">Create an account</Link>
                         </Field>
                     </CardFooter>
                 </Card>
 
                 <div>
                     <ul className='flex list-disc  gap-10 mt-8 text-sm text-gray-400'>
-                        <li className='cursor-pointer'>Privacy Policy</li>
+                        <li className='cursor-pointer list-none'>Privacy Policy</li>
                         <li className='cursor-pointer'>Term of Service</li>
                         <li className='cursor-pointer'>Contact Support</li>
                     </ul>

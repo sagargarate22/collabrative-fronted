@@ -5,17 +5,27 @@ import {
 } from '@tanstack/react-query';
 
 import AuthService from '../services/authService';
+import {useAuthStore} from '../store/authStore';
 
 export default function useLogin(){
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: AuthService.login,
-        onSuccess: (()=> {
-            console.log("sucess");
-        }),
-        onError: (()=>{
-            console.log("error")
+        onSuccess: ((response)=> {
+            useAuthStore.getState().setUser(response!)
         })
     })
 }
+
+export function useRegister(){
+    // const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: AuthService.register,
+        onSuccess: ((response) => {
+            useAuthStore.getState().setUser(response!)
+        })
+    })
+}
+

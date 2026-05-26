@@ -5,3 +5,10 @@ export interface User{
     email: string;
     token: string;
 }
+
+export interface AuthStore {
+    user: User | null
+
+    setUser: (data: User) => void
+    logout: () => void
+}

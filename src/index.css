@@ -165,7 +165,7 @@ code {
 }
 
 :root {
-    --background: #fcf8ff;
+    --background: #F5F2FE;
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
@@ -189,12 +189,12 @@ code {
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar: #303038;
+    --sidebar-foreground: #FCF8FF;
     --sidebar-primary: oklch(0.488 0.243 264.376);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-accent: #303038;
+    --sidebar-accent-foreground: #FCF8FF;
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
 }
@@ -249,9 +249,9 @@ code {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
-/* body {
-  font-family: 'Inter', sans-serif;
-} */
+body {
+  background-color: var(--color-background);
+}
 
 .card{
   background-color: var(--card);
@@ -259,7 +259,7 @@ code {
 }
 /* Custom elevation matching Level 1 guidelines */
 .card-elevation {
-  box-shadow: 0 2px 3px 0 rgba(0,0,0,0.05);
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,0.05);
 }
 
 

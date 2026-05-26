@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/features/auth/store/authStore';
 import axios from 'axios';
 
 
@@ -5,8 +6,9 @@ export const apiClient = axios.create({
     baseURL: "https://localhost:7218/api/"
 })
 
+
 apiClient.interceptors.request.use(config => {
-  const token = localStorage.getItem('auth_token');
+  const token = useAuthStore.getState().user?.token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -23,10 +25,15 @@ apiClient.interceptors.response.use(
 
             if (status === 401)
             {
-                // window.location.href = '/login'
+                useAuthStore.getState().logout()
+                window.location.href = '/login'
+                console.log(error.response.headers);
+                if(error.response.headers['TOKEN_EXPIRED'] === "true"){
+                    
+                }
             }
         }
-
-        return Promise.reject(error.response.data.Errors[0]);
+        console.log(error);
+        return Promise.reject(error);
     }
 )
